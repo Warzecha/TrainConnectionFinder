@@ -1,0 +1,22 @@
+{
+  "name": "train_finder",
+  "version": "0.0.1",
+  "description": "Train connection finder",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Warzecha/Train_finder.git"
+  },
+  "author": "Damian Warzecha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Warzecha/Train_finder/issues"
+  },
+  "homepage": "https://github.com/Warzecha/Train_finder#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
