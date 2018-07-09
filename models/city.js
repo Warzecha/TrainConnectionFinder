@@ -23,15 +23,20 @@ let citySchema = mongoose.Schema({
 
     module.exports.getCities = function(callback, limit) {
         
-        return City.find(callback).limit(limit);
+        City.find(callback).limit(limit);
     }
 
     module.exports.getCityById = function(id, callback) {
         
-        return City.findById(id, callback);
+        City.findById(id, callback);
     }
 
     module.exports.addCity = function(city, callback) {
         
         return City.create(city, callback);
+    }
+
+    module.exports.deleteCityById = function(id, callback) {
+
+        City.remove({ _id: id }, callback);
     }

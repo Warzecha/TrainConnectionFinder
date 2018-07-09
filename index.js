@@ -30,7 +30,7 @@ app.use(function(err, req, res, next){
 })
 
 
-app.get('/api/cities', (req, res) => {
+app.get('/api/cities/', (req, res) => {
     City.getCities(function(err, cities){
         if(err) {
             //  throw err;
@@ -59,19 +59,32 @@ app.get('/api/cities/:id', (req, res) => {
         
     })
     
-    app.post('/api/cities/', (req, res, next) => {
+    app.post('/api/cities/', (req, res) => {
         let newCity = req.body;
-        City.addCity(newCity, (err, city) => {
+        City.addCity(newCity)
+        .then(function(city) {
+            res.json(city)
+        }).catch(function(err){
+            res.status(400).send(err.message);
+        }) 
+    })
+
+    app.delete('/api/cities/:id', (req, res) => {
+        let id = req.params.id;
+        City.deleteCityById(id, (err, response) => {
             if(err) {
-                // console.log('=======================================================');
-                // throw err;
-                res.status(400).send(err.message);
+                
+                res.status(404).send(err.message);
             }
             
-            res.json(city)
+            res.json(response)
             
+
         })
+
     })
+
+
 
     
     
