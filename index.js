@@ -20,51 +20,21 @@ app.use(cors({
 app.use(bodyParser.json());
 
 
+// Error handling middleware
+// TODO: use arrow function (check if possible)
+app.use(function(err, req, res, next){
 
-
-
-
-// let connections = [
-//     {id: 1, begin: 'wroclaw', end: 'krakow', length: 200},
-//     {id: 2, begin: 'krakow', end: 'trzebinia', length: 40}
-// ];
-
-app.get('/', (req, res) => {
-
-    res.send('Welcome in my train connection finder');
+    console.log('========== byl error');
+    res.send({error: err.message});
 
 })
 
-// app.post('/api/connections/', (req, res) => {
-
-//     const newConnection = {
-//         id: connections.length + 1,
-//         begin: req.body.begin,
-//         end: req.body.end,
-//         length: parseFloat(req.body.length)
-
-//     }
-
-//     connections.push(newConnection);
-//     res.send(newConnection);
-
-// })
-
-
-// app.get('/api/shortest/:start/:destination', (req, res) => {
-
-//     res.send(req.params);
-// })
-
-// app.get('/api/connections/', (req, res) => {
-
-//     res.send(connections);
-// })
 
 app.get('/api/cities', (req, res) => {
     City.getCities(function(err, cities){
         if(err) {
-            throw err;
+            //  throw err;
+            res.send(err.message);
         
         }
         
@@ -74,33 +44,36 @@ app.get('/api/cities', (req, res) => {
 
 })
 
-app.post('/api/cities/', (req, res) => {
-    let newCity = req.body;
-    City.addCity(newCity, function(err, city){
-        if(err) {
-            console.log(err)
-        }
-        
-        res.json(newCity);
-
-    })
-
-})
-
-
 app.get('/api/cities/:id', (req, res) => {
-    console.log(req.params.id);
+    
     City.getCityById(req.params.id, function(err, city){
         if(err) {
-            console.log(err.message);
-        }
+                // console.log('=======================================================');
+                // throw err;
+                res.send(err.message);
+            }
+            
+            res.json(city)
+            
+        })
         
-        res.json(city)
-
+    })
+    
+    app.post('/api/cities/', (req, res, next) => {
+        let newCity = req.body;
+        City.addCity(newCity, (err, city) => {
+            if(err) {
+                // console.log('=======================================================');
+                // throw err;
+                res.status(400).send(err.message);
+            }
+            
+            res.json(city)
+            
+        })
     })
 
-})
-
-
+    
+    
 const port = process.env.PORT || 3000;
 app.listen(port , () => { console.log(`Listening on port ${port}`)});
