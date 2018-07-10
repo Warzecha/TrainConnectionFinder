@@ -1,6 +1,16 @@
 <template>
 <div >
   <div>
+    <form v-on:submit.prevent="addCity()">
+      <input type="text" v-model="newCity.name" placeholder="Name">
+
+      <input type="submit" value="Add city">
+
+    </form>
+
+
+  </div>
+  <div>
     <div v-for="city in cities" class="element">
 
       <h4 class="city_name">{{city.name}}</h4>
@@ -22,7 +32,8 @@ export default {
   data () {
     return {
       
-      cities: []
+      cities: [],
+      newCity: {}
     }
   },
   methods:
@@ -43,6 +54,21 @@ export default {
         // .then(response => {return response.json()})
         .then((response) => { 
           console.log('deleted: ' + response.data) 
+          this.getCities();
+        })
+        .catch((error) => { console.error(error) }) 
+
+
+    },
+    addCity: function(){
+        console.log('addCity')
+
+
+      axios
+        .post('http://localhost:3000/api/cities/', this.newCity)
+        // .then(response => {return response.json()})
+        .then((response) => { 
+          // console.log('deleted: ' + response.data) 
           this.getCities();
         })
         .catch((error) => { console.error(error) }) 
