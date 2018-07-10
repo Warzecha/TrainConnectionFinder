@@ -13,6 +13,10 @@
 
 <script>
 /* eslint-disable */
+const axios = require('axios');
+
+
+
 export default {
   name: 'Cities',
   data () {
@@ -23,9 +27,26 @@ export default {
   },
   methods:
   {
+    getCities(){
+      axios
+        .get('http://localhost:3000/api/cities')
+        // .then(response => {return response.json()})
+        .then((response) => { this.cities = response.data })
+        .catch((error) => { console.error(error) }) 
+
+    },
     deleteCity: function(idToDelete){
       
       console.log(`deleting city with id: ${idToDelete}`);
+      axios
+        .delete('http://localhost:3000/api/cities/' + idToDelete)
+        // .then(response => {return response.json()})
+        .then((response) => { 
+          console.log('deleted: ' + response.data) 
+          this.getCities();
+        })
+        .catch((error) => { console.error(error) }) 
+
 
     }
 
@@ -34,21 +55,8 @@ export default {
 
   },
   created () {
-    console.log('ok');
-    fetch('http://localhost:3000/api/cities')
-    // fetch('https://jsonplaceholder.typicode.com/users')
-      .then((response) => {
-        
-        return response.json()
-      })
-      .then((data) => {
-        // console.log(data)
-        this.cities = data
-        
-    })
-      .catch((error) => {
-        console.error(error);
-      })  
+    console.log('mounted');
+    this.getCities(); 
   }
   
 }
