@@ -4,10 +4,11 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const axios = require('axios')
 
 City = require('./models/city');
 
-mongoose.connect('mongodb://localhost/train_connections');
+mongoose.connect('mongodb://localhost/trainFinderDB');
 
 let db = mongoose.connection;
 
@@ -60,13 +61,36 @@ app.get('/api/cities/:id', (req, res) => {
     })
     
     app.post('/api/cities/', (req, res) => {
-        let newCity = req.body;
-        City.addCity(newCity)
+
+        // console.log(req.body);
+        let newCityName = req.body.name;
+        let newCity = {};
+        axios
+        .get('https://maps.googleapis.com/maps/api/geocode/json?address='+newCityName+'&key=AIzaSyDOfkOKdHs2-WM1ek8yOtJA0bBWQn6V298')
+        // .then(response => {return response.json()})
+        .then((response) => { 
+
+            console.log(response.data.results[0])
+
+
+            newCity = {
+                'name': response.data.results[0].formatted_address,
+                'lat': response.data.results[0].geometry.location.lat,
+                'lng': response.data.results[0].geometry.location.lng,
+            }
+            City.addCity(newCity)
         .then(function(city) {
             res.json(city)
         }).catch(function(err){
             res.status(400).send(err.message);
         }) 
+
+         })
+        .catch((error) => { console.error(error) }) 
+
+
+        
+        
     })
 
     app.delete('/api/cities/:id', (req, res) => {

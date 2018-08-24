@@ -6,6 +6,14 @@ let citySchema = mongoose.Schema({
         type: String,
         required: true
     },
+    lat:{
+        type: Number,
+        required: true
+    },
+    lng:{
+        type: Number,
+        required: true
+    },
     create_date:{
         type: Date,
         default: Date.now
@@ -31,9 +39,9 @@ let citySchema = mongoose.Schema({
         City.findById(id, callback);
     }
 
-    module.exports.addCity = function(city, callback) {
+    module.exports.addCity = function(cityName, callback) {
         
-        return City.create(city, callback);
+        return City.create(cityName, callback);
     }
 
     module.exports.deleteCityById = function(id, callback) {
