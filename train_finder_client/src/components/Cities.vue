@@ -14,7 +14,32 @@
   <div>
     <div v-for="city in cities" class="element">
 
-      <h4 class="city_name">{{city.name}}</h4>
+
+    
+<div class="city_name_div">
+  <span class="city_name">{{city.name}}</span>
+</div>
+      
+
+    <div class="label_div">
+      <span class="label">Latitude:</span>
+    </div>  
+      
+      <div class="value_div">
+       <span class="value">{{city.lat}}</span>
+
+      </div>
+
+      <div class="label_div">
+      <span class="label">Longitude:</span>
+    </div>  
+      
+      <div class="value_div">
+       <span class="value">{{city.lng}}</span>
+
+      </div>
+
+     
       <button v-on:click="deleteCity(city._id)" class="delete_button">X</button>
 
       </div>
@@ -71,6 +96,7 @@ export default {
         .then((response) => { 
           // console.log('deleted: ' + response.data) 
           this.getCities();
+          this.newCity.name = '';
         })
         .catch((error) => { console.error(error) }) 
 
@@ -106,11 +132,55 @@ export default {
 .city_name {
 
   display: inline-block;
+  font-weight: bold;
 }
+
+.label {
+
+  display: inline-block;
+  font-weight: lighter;
+}
+
+.value {
+
+  display: inline-block;
+  float: left;
+}
+
+.city_name_div {
+  float: left;
+  display: inline-block;
+  width: 20%;
+  margin: 10px;
+  padding: 5px;
+
+}
+
+.label_div {
+  display: inline-block;
+    float: left;
+  margin: 10px;
+  padding: 5px;
+}
+
+.value_div {
+  display: inline-block;
+    float: left;
+  width: 15%;
+  margin: 10px;
+  padding: 5px;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+  border-radius: 5px;
+}
+
+
 
 .element {
 
-  width: 40%;
+  width: 70%;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-left: auto;
@@ -119,5 +189,6 @@ export default {
   border-width: 1px;
   border-color: gray;
   border-radius: 5px;
+  height: 45px;
 }
 </style>
