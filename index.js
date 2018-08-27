@@ -7,6 +7,7 @@ const cors = require('cors');
 const axios = require('axios')
 
 City = require('./models/city');
+Connection = require('./models/connection');
 
 mongoose.connect('mongodb://localhost/trainFinderDB');
 
@@ -107,6 +108,83 @@ app.get('/api/cities/:id', (req, res) => {
         })
 
     })
+
+
+
+
+    //Connections
+
+
+    app.get('/api/connections/', (req, res) => {
+        Connection.getConnections(function(err, connections){
+            if(err) {
+                //  throw err;
+                res.send(err.message);
+            
+            }
+            
+            res.json(connections)
+    
+        })
+    
+    })
+    
+    app.get('/api/connections/:id', (req, res) => {
+        
+        Connection.getConnectionById(req.params.id, function(err, connection){
+            if(err) {
+                    // console.log('=======================================================');
+                    // throw err;
+                    res.send(err.message);
+                }
+                
+                res.json(connection)
+                
+            })
+            
+        })
+        
+        app.post('/api/connections/', (req, res) => {
+    
+            // console.log(req.body);
+            let newConnectionName = req.body.name;
+            let newConnection = {};
+
+                newConnection = {
+                    'from': new mongoose.Types.ObjectId,
+                    'to': new mongoose.Types.ObjectId,
+                    'durationInMinutes': 20,
+                    'ticketPriceInEUR': 100
+                
+                }
+                Connection.addConnection(newConnection)
+            .then(function(connection) {
+                res.json(connection)
+            }).catch(function(err){
+                res.status(400).send(err.message);
+            }) 
+    
+
+    
+    
+            
+            
+        })
+    
+        app.delete('/api/connections/:id', (req, res) => {
+            let id = req.params.id;
+            Connection.deleteConnectionById(id, (err, response) => {
+                if(err) {
+                    
+                    res.status(404).send(err.message);
+                }
+                
+                res.json(response)
+                
+    
+            })
+    
+        })
 
 
 

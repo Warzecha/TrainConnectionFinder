@@ -1,0 +1,194 @@
+/* eslint-disable */
+<template>
+<div >
+  <div>
+    <form v-on:submit.prevent="addConnection()">
+      <input type="text" v-model="newConnection.name" placeholder="Name">
+
+      <input type="submit" value="Add connection">
+
+    </form>
+
+
+  </div>
+  <div>
+    <div v-for="connection in cities" class="element">
+
+
+    
+<div class="connection_name_div">
+  <span class="connection_name">{{connection.name}}</span>
+</div>
+      
+
+    <div class="label_div">
+      <span class="label">Latitude:</span>
+    </div>  
+      
+      <div class="value_div">
+       <span class="value">{{(connection.lat).toFixed(8)}}</span>
+
+      </div>
+
+      <div class="label_div">
+      <span class="label">Longitude:</span>
+    </div>  
+      
+      <div class="value_div">
+       <span class="value">{{(connection.lng).toFixed(8)}}</span>
+
+      </div>
+
+     
+      <button v-on:click="deleteConnection(connection._id)" class="delete_button">X</button>
+
+      </div>
+  </div>
+</div>
+</template>
+
+<script>
+/* eslint-disable */
+const axios = require('axios');
+
+
+
+export default {
+  name: 'Cities',
+  data () {
+    return {
+      
+      cities: [],
+      newConnection: {}
+    }
+  },
+  methods:
+  {
+    getCities(){
+      axios
+        .get('http://localhost:3000/api/cities')
+        // .then(response => {return response.json()})
+        .then((response) => { this.cities = response.data })
+        .catch((error) => { console.error(error) }) 
+
+    },
+    deleteConnection: function(idToDelete){
+      
+      console.log(`deleting connection with id: ${idToDelete}`);
+      axios
+        .delete('http://localhost:3000/api/cities/' + idToDelete)
+        // .then(response => {return response.json()})
+        .then((response) => { 
+          console.log('deleted: ' + response.data) 
+          this.getCities();
+        })
+        .catch((error) => { console.error(error) }) 
+
+
+    },
+    addConnection: function(){
+        console.log('addConnection')
+
+
+      axios
+        .post('http://localhost:3000/api/cities/', this.newConnection)
+        // .then(response => {return response.json()})
+        .then((response) => { 
+          // console.log('deleted: ' + response.data) 
+          this.getCities();
+          this.newConnection.name = '';
+        })
+        .catch((error) => { console.error(error) }) 
+
+
+    }
+
+
+
+
+  },
+  created () {
+    console.log('mounted');
+    this.getCities(); 
+  }
+  
+}
+</script>
+
+
+<style>
+
+
+.delete_button {
+
+  display: inline;
+  float: right;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+
+}
+
+.connection_name {
+
+  display: inline-block;
+  font-weight: bold;
+}
+
+.label {
+
+  display: inline-block;
+  font-weight: lighter;
+}
+
+.value {
+
+  display: inline-block;
+  float: left;
+}
+
+.connection_name_div {
+  float: left;
+  display: inline-block;
+  width: 20%;
+  margin: 10px;
+  padding: 5px;
+
+}
+
+.label_div {
+  display: inline-block;
+    float: left;
+  margin: 10px;
+  padding: 5px;
+}
+
+.value_div {
+  display: inline-block;
+    float: left;
+  width: 15%;
+  margin: 10px;
+  padding: 5px;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+  border-radius: 5px;
+}
+
+
+
+.element {
+
+  width: 70%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+  border-radius: 5px;
+  height: 45px;
+}
+</style>

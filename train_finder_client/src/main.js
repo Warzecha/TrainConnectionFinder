@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import HelloWorld from './components/HelloWorld'
+import Connections from './components/Connections'
 import Cities from './components/Cities'
 import VueRouter from 'vue-router'
 
@@ -20,6 +21,11 @@ const routes = [
     path: '/cities',
     name: 'Cities',
     component: Cities
+  },
+  {
+    path: '/connections',
+    name: 'Connections',
+    component: Connections
   }
 ]
 
