@@ -26,7 +26,7 @@
     </div>  
       
       <div class="value_div">
-       <span class="value">{{city.lat}}</span>
+       <span class="value">{{(city.lat).toFixed(8)}}</span>
 
       </div>
 
@@ -35,7 +35,7 @@
     </div>  
       
       <div class="value_div">
-       <span class="value">{{city.lng}}</span>
+       <span class="value">{{(city.lng).toFixed(8)}}</span>
 
       </div>
 
