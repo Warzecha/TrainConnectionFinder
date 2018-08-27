@@ -2,6 +2,7 @@
   <div id="app">
     <div id="menu_bar">
       <router-link to="/" class="menu_item">Hello World</router-link>
+      <router-link to="/finder" class="menu_item">Finder</router-link>
       <router-link to="/cities" class="menu_item">Citites manager</router-link>
       <router-link to="/connections" class="menu_item">Connections manager</router-link>
     </div>

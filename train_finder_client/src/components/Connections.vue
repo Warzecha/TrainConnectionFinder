@@ -1,9 +1,32 @@
 /* eslint-disable */
 <template>
 <div >
-  <div>
+  <div id="form">
     <form v-on:submit.prevent="addConnection()">
-      <input type="text" v-model="newConnection.name" placeholder="Name">
+      
+
+      <span>From: </span>
+      <select v-model="fromCity">
+
+        <option v-for="city in cities" :value="JSON.stringify(city)">
+          {{city.name}}
+        </option>
+
+      </select>
+
+     <span>To: </span>
+
+        <select v-model="toCity">
+
+        <option v-for="city in cities" :value="JSON.stringify(city)">
+          {{city.name}}
+        </option>
+
+      </select>
+
+
+      <input type="number" v-model="newConnection.durationInMinutes" placeholder="Duration in minutes">
+      <input type="number" v-model="newConnection.ticketPriceInEUR" step="0.01" placeholder="Ticket price">
 
       <input type="submit" value="Add connection">
 
@@ -12,30 +35,44 @@
 
   </div>
   <div>
-    <div v-for="connection in cities" class="element">
+    <div v-for="connection in connections" class="element">
 
 
-    
-<div class="connection_name_div">
-  <span class="connection_name">{{connection.name}}</span>
-</div>
-      
+          
 
     <div class="label_div">
-      <span class="label">Latitude:</span>
+      <span class="label">From:</span>
     </div>  
       
       <div class="value_div">
-       <span class="value">{{(connection.lat).toFixed(8)}}</span>
+       <span class="value">{{(connection.fromCityName)}}</span>
 
       </div>
 
       <div class="label_div">
-      <span class="label">Longitude:</span>
+      <span class="label">To:</span>
     </div>  
       
       <div class="value_div">
-       <span class="value">{{(connection.lng).toFixed(8)}}</span>
+       <span class="value">{{(connection.toCityName)}}</span>
+
+      </div>
+
+      <div class="label_div">
+      <span class="label">Price:</span>
+    </div>  
+      
+      <div class="number_div">
+       <span class="value">{{(connection.ticketPriceInEUR)}} €</span>
+
+      </div>
+
+            <div class="label_div">
+      <span class="label">Duration:</span>
+    </div>  
+      
+      <div class="number_div">
+       <span class="value">{{Math.floor(connection.durationInMinutes/60)}}:{{connection.durationInMinutes % 60}}</span>
 
       </div>
 
@@ -47,6 +84,11 @@
 </div>
 </template>
 
+
+<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+   integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+   crossorigin=""></script>
+
 <script>
 /* eslint-disable */
 const axios = require('axios');
@@ -54,12 +96,15 @@ const axios = require('axios');
 
 
 export default {
-  name: 'Cities',
+  name: 'Connections',
   data () {
     return {
       
+      connections: [],
       cities: [],
-      newConnection: {}
+      newConnection: {},
+      fromCity: {},
+      toCity: {}
     }
   },
   methods:
@@ -72,15 +117,23 @@ export default {
         .catch((error) => { console.error(error) }) 
 
     },
+    getConnections(){
+      axios
+        .get('http://localhost:3000/api/connections')
+        // .then(response => {return response.json()})
+        .then((response) => { this.connections = response.data })
+        .catch((error) => { console.error(error) }) 
+
+    },
     deleteConnection: function(idToDelete){
       
       console.log(`deleting connection with id: ${idToDelete}`);
       axios
-        .delete('http://localhost:3000/api/cities/' + idToDelete)
+        .delete('http://localhost:3000/api/connections/' + idToDelete)
         // .then(response => {return response.json()})
         .then((response) => { 
           console.log('deleted: ' + response.data) 
-          this.getCities();
+          this.getConnections();
         })
         .catch((error) => { console.error(error) }) 
 
@@ -89,14 +142,25 @@ export default {
     addConnection: function(){
         console.log('addConnection')
 
+        this.fromCity = JSON.parse(this.fromCity);
+        this.toCity = JSON.parse(this.toCity);
+
+        this.newConnection.fromCityId = this.fromCity._id;
+        this.newConnection.toCityId = this.toCity._id;
+        this.newConnection.fromCityName = this.fromCity.name;
+        this.newConnection.toCityName = this.toCity.name;
+        console.log(this.fromCity)
+
+        console.log(this.newConnection)
 
       axios
-        .post('http://localhost:3000/api/cities/', this.newConnection)
+        .post('http://localhost:3000/api/connections/', this.newConnection)
         // .then(response => {return response.json()})
         .then((response) => { 
           // console.log('deleted: ' + response.data) 
-          this.getCities();
-          this.newConnection.name = '';
+          this.getConnections();
+          this.newConnection = {};
+          // this.newConnection.name = '';
         })
         .catch((error) => { console.error(error) }) 
 
@@ -109,6 +173,7 @@ export default {
   },
   created () {
     console.log('mounted');
+    this.getConnections();
     this.getCities(); 
   }
   
@@ -176,6 +241,19 @@ export default {
   border-radius: 5px;
 }
 
+.number_div {
+  display: inline-block;
+    float: left;
+  width: 8%;
+  margin: 10px;
+  padding: 5px;
+
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+  border-radius: 5px;
+}
+
 
 
 .element {
@@ -191,4 +269,10 @@ export default {
   border-radius: 5px;
   height: 45px;
 }
+
+
+#form {
+  margin-top: 10px;
+}
+
 </style>

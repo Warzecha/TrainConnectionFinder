@@ -2,12 +2,20 @@ const mongoose = require('mongoose');
 
 let connectionSchema = mongoose.Schema({
 
-    from:{
+    fromCityId:{
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    to:{
+    fromCityName:{
+        type: String,
+        required: true
+    },
+    toCityId:{
         type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
+    toCityName:{
+        type: String,
         required: true
     },
     durationInMinutes:{

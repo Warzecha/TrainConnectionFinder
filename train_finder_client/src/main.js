@@ -5,6 +5,7 @@ import App from './App'
 import HelloWorld from './components/HelloWorld'
 import Connections from './components/Connections'
 import Cities from './components/Cities'
+import Finder from './components/Finder'
 import VueRouter from 'vue-router'
 
 // Vue.config.productionTip = false
@@ -26,6 +27,11 @@ const routes = [
     path: '/connections',
     name: 'Connections',
     component: Connections
+  },
+  {
+    path: '/finder',
+    name: 'Finder',
+    component: Finder
   }
 ]
 

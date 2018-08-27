@@ -147,16 +147,16 @@ app.get('/api/cities/:id', (req, res) => {
         app.post('/api/connections/', (req, res) => {
     
             // console.log(req.body);
-            let newConnectionName = req.body.name;
-            let newConnection = {};
+            
+            let newConnection = req.body;
 
-                newConnection = {
-                    'from': new mongoose.Types.ObjectId,
-                    'to': new mongoose.Types.ObjectId,
-                    'durationInMinutes': 20,
-                    'ticketPriceInEUR': 100
+                // newConnection = {
+                //     'from': new mongoose.Types.ObjectId,
+                //     'to': new mongoose.Types.ObjectId,
+                //     'durationInMinutes': 20,
+                //     'ticketPriceInEUR': 100
                 
-                }
+                // }
                 Connection.addConnection(newConnection)
             .then(function(connection) {
                 res.json(connection)
