@@ -6,7 +6,11 @@ import HelloWorld from './components/HelloWorld'
 import Connections from './components/Connections'
 import Cities from './components/Cities'
 import Finder from './components/Finder'
+import GoogleMap from './components/GoogleMap'
 import VueRouter from 'vue-router'
+import * as VueGoogleMaps from "vue2-google-maps";
+
+
 
 // Vue.config.productionTip = false
 
@@ -38,6 +42,13 @@ const routes = [
 const router = new VueRouter({
   routes: routes
 })
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyCxFYB_ygfntjuA0_OlbtEkkrqc59YVNHY",
+    libraries: "places" // necessary for places input
+  }
+});
 
 /* eslint-disable no-new */
 new Vue({
