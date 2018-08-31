@@ -71,7 +71,7 @@ app.get('/api/cities/:id', (req, res) => {
         // .then(response => {return response.json()})
         .then((response) => { 
 
-            console.log(response.data.results[0])
+            // console.log(response.data.results[0])
 
 
             newCity = {
