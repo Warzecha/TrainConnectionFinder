@@ -9,7 +9,7 @@ const axios = require('axios')
 City = require('./models/city');
 Connection = require('./models/connection');
 
-mongoose.connect('mongodb://localhost/trainFinderDB');
+mongoose.connect('MONGODB_URI');
 
 let db = mongoose.connection;
 
