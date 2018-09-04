@@ -4,12 +4,15 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const axios = require('axios')
+const axios = require('axios');
+const config = require('./config/index');
 
 City = require('./models/city');
 Connection = require('./models/connection');
 
-mongoose.connect('MONGODB_URI');
+
+// mongoose.connect(config.db);
+mongoose.connect('mongodb://warzecha:elomelo320@ds139992.mlab.com:39992/train-finder-db');
 
 let db = mongoose.connection;
 
@@ -25,9 +28,7 @@ app.use(bodyParser.json());
 // Error handling middleware
 // TODO: use arrow function (check if possible)
 app.use(function(err, req, res, next){
-
-    console.log('========== byl error');
-    res.send({error: err.message});
+        res.send({error: err.message});
 
 })
 
@@ -65,31 +66,37 @@ app.get('/api/cities/:id', (req, res) => {
 
         // console.log(req.body);
         let newCityName = req.body.name;
-        let newCity = {};
-        axios
-        .get('https://maps.googleapis.com/maps/api/geocode/json?address='+newCityName+'&key=AIzaSyDOfkOKdHs2-WM1ek8yOtJA0bBWQn6V298')
-        // .then(response => {return response.json()})
-        .then((response) => { 
-
-            // console.log(response.data.results[0])
-
-
-            newCity = {
-                'name': response.data.results[0].formatted_address,
-                'lat': response.data.results[0].geometry.location.lat,
-                'lng': response.data.results[0].geometry.location.lng,
-            }
-            City.addCity(newCity)
-        .then(function(city) {
-            res.json(city)
-        }).catch(function(err){
-            res.status(400).send(err.message);
-        }) 
-
-         })
-        .catch((error) => { console.error(error) }) 
-
-
+        if(newCityName)
+        {
+            axios
+            .get('https://maps.googleapis.com/maps/api/geocode/json?address='+newCityName+'&key=AIzaSyDOfkOKdHs2-WM1ek8yOtJA0bBWQn6V298')
+            // .then(response => {return response.json()})
+            .then((response) => { 
+    
+                // console.log(response.data.results[0])
+    
+    
+                let newCity = {
+                    'name': response.data.results[0].formatted_address,
+                    'lat': response.data.results[0].geometry.location.lat,
+                    'lng': response.data.results[0].geometry.location.lng,
+                }
+                City.addCity(newCity)
+            .then(function(city) {
+                res.json(city)
+            }).catch(function(err){
+                res.status(400).send(err.message);
+            }) 
+    
+             })
+            .catch((error) => { console.error(error) }) 
+    
+    
+        } else 
+        {
+            res.status(400).send('Property name is required');
+        }
+        
         
         
     })
@@ -187,8 +194,14 @@ app.get('/api/cities/:id', (req, res) => {
         })
 
 
+        app.get('/api/directions/')
+
+
 
     
     
-const port = process.env.PORT || 3000;
-app.listen(port , () => { console.log(`Listening on port ${port}`)});
+// const port = process.env.PORT || 3000;
+app.listen(config.port , () => { console.log(`Listening on port ${config.port}`)});
+
+
+module.exports = app;
