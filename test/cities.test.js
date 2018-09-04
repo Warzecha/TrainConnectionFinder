@@ -91,17 +91,18 @@ describe('Cities API integration tests', function(){
             .end((err, res) => {
                 res.should.have.status(400);
                 
+                chai.request(app)
+                .get('/api/cities')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(0);
+                done();
+                });
             });
 
 
-            chai.request(app)
-            .get('/api/cities')
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.body.should.be.a('array');
-                res.body.length.should.be.eql(0);
-            done();
-            });
+       
 
 
 
