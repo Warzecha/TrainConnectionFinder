@@ -17,7 +17,6 @@ describe('Connections API integration tests', function(){
 
     beforeEach((done) => { //Before each test we empty the database
         Connection.remove({}, (err) => { 
-            console.log('database cleared');
            done();           
         });        
     });

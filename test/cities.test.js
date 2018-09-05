@@ -13,7 +13,6 @@ describe('Cities API integration tests', function(){
 
     beforeEach((done) => { //Before each test we empty the database
         City.remove({}, (err) => { 
-            // console.log('database cleared');
            done();           
         });        
     });
