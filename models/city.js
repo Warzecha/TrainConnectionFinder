@@ -29,9 +29,10 @@ let citySchema = mongoose.Schema({
 
 
 
-    module.exports.getCities = function(callback, limit) {
+    module.exports.getCities = function() {
         
-        City.find(callback).limit(limit);
+        let query = City.find();
+        return query.exec();
     }
 
     module.exports.getCityById = function(id, callback) {
@@ -47,5 +48,6 @@ let citySchema = mongoose.Schema({
 
     module.exports.deleteCityById = function(id, callback) {
 
-        City.remove({ _id: id }, callback);
+        let query = City.findByIdAndRemove(id);
+        return query.exec();
     }
