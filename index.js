@@ -29,23 +29,25 @@ app.use(function (err, req, res, next) {
 })
 
 app.get('/api/cities/', (req, res) => {
-    City.getCities(function (err, cities) {
-        if (err) {
-            //  throw err;
-            res.send(err.message);
-        }
-        res.json(cities)
+    City.getCities()
+    .then((cities) => {
+        res.json(cities);
+    })
+    .catch((err) => {
+        res.status(400).send(err.message);
     })
 })
 
 app.get('/api/cities/:id', (req, res) => {
-    City.getCityById(req.params.id, function (err, city) {
-        if (err) {
-            // throw err;
-            res.send(err.message);
-        }
+    City.getCityById(req.params.id)
+    .then((city) => {
         res.json(city)
     })
+    .catch((err) => {
+        res.status(400).send(err.message);
+    });
+        
+    
 })
 
 app.post('/api/cities/', (req, res) => {
@@ -77,13 +79,16 @@ app.post('/api/cities/', (req, res) => {
 
 app.delete('/api/cities/:id', (req, res) => {
     let id = req.params.id;
-    City.deleteCityById(id, (err, response) => {
-        if (err) {
+    City.deleteCityById(id)
+        .then((response) => {
+            res.json(response);
+        })
+        .catch((err) => {
             res.status(404).send(err.message);
-        }
-        res.json(response)
-    })
-})
+        });
+        
+    });
+
 
 //Connections
 
@@ -152,7 +157,7 @@ app.get('/api/directions/:from/:to/:routeMode', (req, res) => {
 
 
 
-            
+
 
 
         });
