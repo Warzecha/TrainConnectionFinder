@@ -17,22 +17,10 @@ describe('Connections API integration tests', function(){
 
     beforeEach((done) => { //Before each test we empty the database
         Connection.remove({}, (err) => { 
+            console.log('database cleared');
            done();           
         });        
     });
-
-
-    // describe('GET requests', function() { 
-    //     it('should be empty', function(done) { 
-    //       request(app) .get('/cities')
-    //         .end(function(err, res) { 
-    //           expect(res.statusCode).to.equal(200); 
-    //           expect(res.body).to.be.an('array'); 
-    //           expect(res.body).to.be.empty; 
-    //           done(); 
-    //         }); 
-    //     });
-    //   });
 
 
     describe('POST requests',() => {
@@ -202,17 +190,44 @@ describe('Connections API integration tests', function(){
             });
         });
 
+        it('should not be able to post a connection without a valid ticketPrice property', (done) => {
+            let connection = {
+                fromCityId: "5b8ee0d424350a785fa05ae0",
+                fromCityName: "Kraków, Poland",
+                toCityId:  "5b8ee16a24350a785fa05ae1",
+                toCityName: "Warszawa, Poland",
+                ticketPriceInEUR: 'dirt cheap',
+                durationInMinutes: 117
+            }
+            chai.request(app)
+            .post('/api/connections')
+            .send(connection)
+            .end((err, res) => {
+                res.should.have.status(400);
+                
+                chai.request(app)
+                .get('/api/connections')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(0);
+                done();
+                });
+            });
+        });
 
 
-    }),
+
+    });
 
 
     it('Database should be empty', (done) => {
         chai.request(app)
-            .get('/api/cities')
+            .get('/api/connections')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('array');
+                // console.log(res.body);
                 res.body.length.should.be.eql(0);
             done();
             });

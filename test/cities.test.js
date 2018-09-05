@@ -3,42 +3,30 @@ const app = require('../index');
 const chai = require('chai');
 const request = require('supertest');
 const City = require('../models/city');
-const expect = chai.expect;
-
 const chaiHttp = require('chai-http');
-
-const should = chai.should();
-
-
-chai.use(chaiHttp);
-
-
+// const expect = chai.expect;
+// const should = chai.should();
 // const mocha = require('mocha');
-
+chai.use(chaiHttp);
 
 describe('Cities API integration tests', function(){
 
     beforeEach((done) => { //Before each test we empty the database
         City.remove({}, (err) => { 
+            // console.log('database cleared');
            done();           
         });        
     });
 
 
-    // describe('GET requests', function() { 
-    //     it('should be empty', function(done) { 
-    //       request(app) .get('/cities')
-    //         .end(function(err, res) { 
-    //           expect(res.statusCode).to.equal(200); 
-    //           expect(res.body).to.be.an('array'); 
-    //           expect(res.body).to.be.empty; 
-    //           done(); 
-    //         }); 
-    //     });
-    //   });
+
+
 
 
     describe('POST requests',() => {
+
+
+
 
 
         it('should be able to post a correct city', (done) => {
@@ -109,8 +97,55 @@ describe('Cities API integration tests', function(){
         });
 
 
+        it('should be able to post multiple cities', (done) => {
 
-    }),
+            let city1 = {
+                name: 'Krakow'
+            }
+            let city2 = {
+                name: 'Warszawa'
+            }
+            let city3 = {
+                name: 'Poznan'
+            }
+
+
+            var requester = chai.request(app).keepOpen()
+
+            Promise.all([
+              requester.post('/api/cities')
+              .send(city1),
+              requester.post('/api/cities')
+              .send(city2),
+              requester.post('/api/cities')
+              .send(city3)
+            ])
+            .then((responses) => {
+                // console.log(responses[0])
+                responses.should.have.lengthOf(3);
+                responses.forEach(response => {
+                    response.should.have.status(200);
+
+                });
+
+
+            })
+            .then(() => {
+                requester.close();
+                
+            })
+            .then(() => {
+                done();
+            });
+
+
+        });
+
+
+
+    });
+
+
 
 
     it('Database should be empty', (done) => {
@@ -128,6 +163,6 @@ describe('Cities API integration tests', function(){
 
 
 
-   
+  
 
 });
