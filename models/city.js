@@ -36,7 +36,8 @@ let citySchema = mongoose.Schema({
 
     module.exports.getCityById = function(id, callback) {
         
-        City.findById(id, callback);
+        let query = City.findById(id);
+        return query.exec();
     }
 
     module.exports.addCity = function(cityName, callback) {

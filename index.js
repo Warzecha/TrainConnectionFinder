@@ -39,13 +39,15 @@ app.get('/api/cities/', (req, res) => {
 })
 
 app.get('/api/cities/:id', (req, res) => {
-    City.getCityById(req.params.id, function (err, city) {
-        if (err) {
-            // throw err;
-            res.send(err.message);
-        }
+    City.getCityById(req.params.id)
+    .then((city) => {
         res.json(city)
     })
+    .catch((err) => {
+        res.status(400).send(err.message);
+    });
+        
+    
 })
 
 app.post('/api/cities/', (req, res) => {
@@ -152,7 +154,7 @@ app.get('/api/directions/:from/:to/:routeMode', (req, res) => {
 
 
 
-            
+
 
 
         });
