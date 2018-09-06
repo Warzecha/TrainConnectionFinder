@@ -139,46 +139,47 @@ app.get('/api/directions/:from/:to/:routeMode', (req, res) => {
 
     console.log('getting directions');
 
-    let fromCity = {};
-    let toCity = {};
+    let fromCityId = req.params.from;
+    let toCityId = req.params.to;
+    let routeMode = req.params.routeMode;
+
+    let cities;
+    let connections;
+    let fromCity;
+    let toCity;
+
+    Promise.all([
+        City.getCities(),
+        Connection.getConnections(),
+        City.getCityById(fromCityId),
+        City.getCityById(toCityId)
+
+    ])
+    .then((responses) => {
+        cities = responses[0];
+        connections = responses[1];
+        fromCity = responses[2];
+        toCity = responses[3];
     
-    City.getCityById(req.params.from, function (err, city) {
-        if (err) {
-            // throw err;
-            res.send(err.message);
+        console.log(fromCity);
+    
+        let response = {
+            from: fromCity,
+            to: toCity
         }
+    
+        res.json(response);
+
         
-        fromCity = city;
 
-        City.getCityById(req.params.to, function (err, city) {
-            if (err) {
-                // throw err;
-                res.send(err.message);
-            }
-            
-            toCity = city;
+    })
 
-
-
-
-
-
-        });
-    });
-    console.log(fromCity);
+    // console.log(fromCity);
 
     
 
 
     
-
-
-    let response = {
-        from: fromCity,
-        to: toCity
-    }
-
-    res.json(response);
 
 
 
