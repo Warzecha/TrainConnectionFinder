@@ -93,23 +93,25 @@ app.delete('/api/cities/:id', (req, res) => {
 //Connections
 
 app.get('/api/connections/', (req, res) => {
-    Connection.getConnections(function (err, connections) {
-        if (err) {
-            //  throw err;
-            res.send(err.message);
-        }
+    Connection.getConnections()
+    .then((connections) => {
         res.json(connections)
+    })
+    .catch((err) => {
+        res.send(err.message);
     })
 })
 
 app.get('/api/connections/:id', (req, res) => {
-    Connection.getConnectionById(req.params.id, function (err, connection) {
-        if (err) {
-            // throw err;
-            res.send(err.message);
-        }
-        res.json(connection)
+    Connection.getConnectionById(req.params.id)
+    .then((connection) => {
+        res.json(connection);
+
     })
+    .catch((err) => {
+        res.send(err.message);
+    })
+    
 })
 
 app.post('/api/connections/', (req, res) => {
@@ -124,11 +126,12 @@ app.post('/api/connections/', (req, res) => {
 
 app.delete('/api/connections/:id', (req, res) => {
     let id = req.params.id;
-    Connection.deleteConnectionById(id, (err, response) => {
-        if (err) {
-            res.status(404).send(err.message);
-        }
-        res.json(response)
+    Connection.deleteConnectionById(id)
+    .then((response) => {
+        res.json(response);
+    })
+    .catch((err) => {
+        res.status(404).send(err.message);
     })
 })
 

@@ -41,22 +41,25 @@ let connectionSchema = mongoose.Schema({
 
 
 
-    module.exports.getConnections = function(callback, limit) {
+    module.exports.getConnections = function() {
         
-        Connection.find(callback).limit(limit);
+        let query = Connection.find();
+        return query.exec();
     }
 
     module.exports.getConnectionById = function(id, callback) {
         
-        Connection.findById(id, callback);
+        let query = Connection.findById(id);
+        return query.exec();
     }
 
-    module.exports.addConnection = function(connectionName, callback) {
+    module.exports.addConnection = function(connectionName) {
         
-        return Connection.create(connectionName, callback);
+        return Connection.create(connectionName);
     }
 
     module.exports.deleteConnectionById = function(id, callback) {
 
-        Connection.remove({ _id: id }, callback);
+        let query = Connection.findByIdAndRemove(id);
+        return query.exec();
     }
