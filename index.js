@@ -16,7 +16,7 @@ mongoose.connect(config.db);
 let db = mongoose.connection;
 
 app.use(cors({
-    origin: 'http://localhost:8080',
+    origin: ['http://localhost:8080', 'https://warzecha.github.io'],
     credentials: true
 }));
 
