@@ -162,6 +162,12 @@ app.get('/api/directions/:from/:to/:routeMode', (req, res) => {
         toCity = responses[3];
     
         console.log(fromCity);
+
+
+
+
+
+
     
         let response = {
             from: fromCity,
