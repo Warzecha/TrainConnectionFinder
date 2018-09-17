@@ -10,8 +10,8 @@ const config = require('./config/index');
 City = require('./models/city');
 Connection = require('./models/connection');
 
-// mongoose.connect(config.db);
-mongoose.connect('mongodb://warzecha:elomelo320@ds139992.mlab.com:39992/train-finder-db');
+mongoose.connect(config.db);
+// mongoose.connect('mongodb://warzecha:elomelo320@ds139992.mlab.com:39992/train-finder-db');
 
 let db = mongoose.connection;
 
