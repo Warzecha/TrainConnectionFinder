@@ -55,7 +55,7 @@ app.post('/api/cities/', (req, res) => {
     let newCityName = req.body.name;
     if (newCityName) {
         axios
-            .get('https://maps.googleapis.com/maps/api/geocode/json?address=' + newCityName + '&key=AIzaSyDOfkOKdHs2-WM1ek8yOtJA0bBWQn6V298')
+            .get('https://maps.googleapis.com/maps/api/geocode/json?address=' + newCityName + '&key='+ config.geocodingApiKey )
             // .then(response => {return response.json()})
             .then((response) => {
                 let newCity = {
