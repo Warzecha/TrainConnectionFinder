@@ -185,7 +185,7 @@ app.get('/api/directions/:from/:to/:routeMode', (req, res) => {
 })
 
 app.get('/api/gmap_key', (req, res) => {
-    res.send(config.googleMapsApiKey)
+    res.json(config.googleMapsApiKey)
 })
 // const port = process.env.PORT || 3000;
 app.listen(config.port, () => { console.log(`Listening on port ${config.port}`) });
